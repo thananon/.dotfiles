@@ -73,6 +73,10 @@ source $ZSH/oh-my-zsh.sh
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 
+export MPI_DIR=${HOME}/opt/mpi
+export PATH=${MPI_DIR}/bin:${PATH}
+export LD_LIBRARY_PATH=${MPI_PATH}/lib:${LD_LIBRARY_PATH}
+
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -81,5 +85,33 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export ACK_DIR=${HOME}/_personal/ack-2.14-single-file
+export ACK_DIR=${HOME}/.dotfiles/ack-2.14-single-file
 alias ack='perl $ACK_DIR'
+module load cisco/gnuplot/4.6.4
+module load slurm
+module load cisco/gcc/4.5.4
+
+SSH_ENV="$HOME/.ssh/environment"
+
+function start_agent {
+    echo "Initialising new SSH agent..."
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    echo succeeded
+    chmod 600 "${SSH_ENV}"
+		    . "${SSH_ENV}" > /dev/null
+    /usr/bin/ssh-add ~/.ssh/savbu-usnic;
+}
+
+
+# Source SSH settings, if applicable
+
+if [ "$HOSTNAME" = savbu-usnic-a ]; then
+	 if [ -f "${SSH_ENV}" ]; then
+	     	. "${SSH_ENV}" > /dev/null
+    	 	ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+       		 	             start_agent;
+   		 }
+ 	else
+   	start_agent;
+ 	fi
+fi
