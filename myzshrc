@@ -67,29 +67,13 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
 
 export MPI_DIR=${HOME}/opt/mpi
 export PATH=${MPI_DIR}/bin:${PATH}
 export LD_LIBRARY_PATH=${MPI_PATH}/lib:${LD_LIBRARY_PATH}
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 export ACK_DIR=${HOME}/.dotfiles/ack-2.14-single-file
 alias ack='perl $ACK_DIR'
-module load cisco/gnuplot/4.6.4
-module load slurm
-module load cisco/gcc/4.5.4
 
 SSH_ENV="$HOME/.ssh/environment"
 
@@ -103,9 +87,11 @@ function start_agent {
 }
 
 
-# Source SSH settings, if applicable
+# Config for savbu
 
 if [ "$HOSTNAME" = savbu-usnic-a ]; then
+
+	# Source SSH settings, if applicable
 	 if [ -f "${SSH_ENV}" ]; then
 	     	. "${SSH_ENV}" > /dev/null
     	 	ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
@@ -114,4 +100,9 @@ if [ "$HOSTNAME" = savbu-usnic-a ]; then
  	else
    	start_agent;
  	fi
+
+	# Load modules
+	module load cisco/gnuplot/4.6.4
+	module load slurm
+	module load cisco/gcc/4.5.4
 fi
