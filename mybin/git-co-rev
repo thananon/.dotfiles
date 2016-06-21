@@ -1,0 +1,41 @@
+#!/usr/bin/env zsh
+
+usage() {
+    cat <<EOF
+$(basename "$0") [-h] [-l n] [rev] -- Checkout a rev, fuzzily
+
+where:
+    -h show this help text
+    -l limit rev output listed to n (default: 20)
+EOF
+
+    exit 1
+}
+
+n=20
+while getopts ':h:l:' option; do
+    case "$option" in
+        l)
+            n="$OPTARG"
+            ;;
+        h)
+            usage
+            ;;
+        *)
+            usage
+            ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+if [ -z "$1" ]; then
+    echo "missing revision"
+    echo
+    usage
+fi
+
+rev=$(git rev-list "$1" --abbrev-commit --pretty=oneline --max-count="$n" | fzf)
+git checkout $(echo "$rev" | cut -d ' ' -f 1)
+
+exit "$?"
