@@ -1,0 +1,70 @@
+#!/usr/bin/env perl
+
+use strict;
+
+use Getopt::Long;
+
+# From https://pushover.net/apps
+
+# I used to have my pushover app/user keys hard-coded here in this
+# script.  But people keep asking me for a copy of this script, and I
+# don't want to leak my account details to them.  So I moved them off
+# to a separate file.
+my $app;
+my $user;
+my $file;
+
+GetOptions("app=s"  => \$app,
+           "user=s" => \$user,
+           "file=s" => \$file)
+    or die("Error in command line arguments\n");
+
+if (!defined($file) &&
+    defined($ENV{DOTFILES}) &&
+    -r "$ENV{DOTFILES}/pushover.txt") {
+    $file = "$ENV{DOTFILES}/pushover.txt";
+}
+
+if (defined($file)) {
+    die "Cannot read file: $file"
+        if (! -r $file);
+
+    open(IN, $file) || die "Can't open pushover account file ($file)";
+    my $data;
+    $data .= $_
+        while (<IN>);
+    close(IN);
+
+    $data =~ m/app:(.+)$/mg;
+    $app = $1;
+    $data =~ m/user:(.+)$/mg;
+    $user = $1;
+}
+
+die "Must specify Pushover.net user and app keys"
+    if (!$user || !$app);
+
+my $msg = join(" ", @ARGV);
+if ($msg eq "") {
+    print "Must specify a message to send\n";
+    exit(1);
+}
+
+my $t = time();
+
+# Send the message
+my $out = `curl -s -F "timestamp=$t" -F "token=$app" -F "user=$user" -F "message=$msg" https://api.pushover.net/1/messages.json`;
+
+# We'll get a simple JSON reply back.  No need for a JSON module here;
+# just do a simple parse for the "status" return value.
+chomp($out);
+$out =~ m/"status":(\d+)/;
+my $status = $1;
+if ($status == 1) {
+    print "*** Message sent to pushover successfully:\n$msg\n";
+    exit(0);
+} else {
+    print "Message to pushover failed! (status: $status)\n";
+    print "Raw output: $out\n";
+    exit(1);
+}
