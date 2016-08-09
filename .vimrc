@@ -1,6 +1,5 @@
 call plug#begin('~/.vim/plugged')
 
-" Make sure you use single quotes
 
 " " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
 Plug 'junegunn/vim-easy-align'
@@ -8,17 +7,13 @@ Plug 'junegunn/vim-easy-align'
  " Any valid git URL is allowed
  Plug 'https://github.com/junegunn/vim-github-dashboard.git'
  Plug 'https://github.com/flazz/vim-colorschemes.git'
- Plug 'https://github.com/Valloric/YouCompleteMe.git'
-
+" Plug 'https://github.com/Valloric/YouCompleteMe.git'
+ Plug 'https://github.com/tpope/vim-fugitive.git'
+ Plug 'https://github.com/blueyed/vim-diminactive.git'
+ Plug 'tmux-plugins/vim-tmux-focus-events'
  " Group dependencies, vim-snippets depends on ultisnips
  Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
- " On-demand loading
- " Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
- " Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-
- " Using a non-master branch
- "Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
 
  " Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
  Plug 'fatih/vim-go', { 'tag': '*' }
@@ -29,8 +24,6 @@ Plug 'junegunn/vim-easy-align'
  " Plugin outside ~/.vim/plugged with post-update hook
  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
- " Unmanaged plugin (manually installed and updated)
- Plug '~/my-prototype-plugin'
  Plug 'bling/vim-airline'
  " Add plugins to &runtimepath
  Plug 'kien/ctrlp.vim'
@@ -76,4 +69,21 @@ set hlsearch
 set backspace=2
 set laststatus=2
 set number
+let g:diminactive_enable_focus = 1
 
+
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+
+filetype plugin indent on
+" show existing tab with 4 spaces width
+set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
