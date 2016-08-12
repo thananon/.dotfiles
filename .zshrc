@@ -1,5 +1,6 @@
 # Path to your oh-my-zsh installation.
   export ZSH=/home/apatinya/.oh-my-zsh
+  export DOTFILES=$HOME/.dotfiles
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -69,8 +70,8 @@ source $ZSH/oh-my-zsh.sh
 
 
 export MPI_DIR=${HOME}/opt/mpi
-export PATH=${MPI_DIR}/bin:${HOME}/opt/bin:${PATH}
-export LD_LIBRARY_PATH=${MPI_DIR}/lib:${HOME}/opt/lib:${LD_LIBRARY_PATH}
+export PATH=${MPI_DIR}/bin:${HOME}/opt/bin:${PATH}:/opt/intel/compilers_and_libraries_2016.3.210/linux/compiler/bin
+export LD_LIBRARY_PATH=${MPI_DIR}/lib:${HOME}/opt/lib:/opt/intel/compilers_and_libraries_2016.3.210/linux/compiler/lib/intel64:${LD_LIBRARY_PATH}
 
 export ACK_DIR=${HOME}/.dotfiles/ack-2.14-single-file
 alias ack='perl $ACK_DIR'
@@ -106,9 +107,12 @@ if [ "$HOSTNAME" = savbu-usnic-a ]; then
 	module load slurm
 	module load cisco/vim/7.4.1147
 	module load cisco/ag
-	module load cisco/gcc/5.3.0
-        module load cisco/gdb/7.11.1
+#	module load cisco/intel-compilers/2016-16.0.3.210
+	export PATH=/auto/vic/bin:${PATH}
 fi
+module load cisco/gcc/5.3.0
+module load cisco/gdb
+module load cisco/intel-compilers
 
 fd() {
 	  local dir
