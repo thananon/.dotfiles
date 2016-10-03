@@ -21,8 +21,8 @@ GetOptions("app=s"  => \$app,
 
 if (!defined($file) &&
     defined($ENV{DOTFILES}) &&
-    -r "$ENV{DOTFILES}/pushover.txt") {
-    $file = "$ENV{DOTFILES}/pushover.txt";
+    -r "$ENV{DOTFILES}/pushover-account.txt") {
+    $file = "$ENV{DOTFILES}/pushover-account.txt";
 }
 
 if (defined($file)) {
