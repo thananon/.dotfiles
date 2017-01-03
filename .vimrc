@@ -5,22 +5,22 @@ call plug#begin('~/.vim/plugged')
 Plug 'junegunn/vim-easy-align'
 
  " Any valid git URL is allowed
- Plug 'https://github.com/junegunn/vim-github-dashboard.git'
- Plug 'https://github.com/flazz/vim-colorschemes.git'
+Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+Plug 'https://github.com/flazz/vim-colorschemes.git'
 " Plug 'https://github.com/Valloric/YouCompleteMe.git'
- Plug 'https://github.com/tpope/vim-fugitive.git'
- Plug 'scrooloose/nerdcommenter'
- Plug 'https://github.com/blueyed/vim-diminactive.git'
- Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'https://github.com/tpope/vim-fugitive.git'
+Plug 'scrooloose/nerdcommenter'
+Plug 'https://github.com/blueyed/vim-diminactive.git'
+Plug 'tmux-plugins/vim-tmux-focus-events'
  " Plugin outside ~/.vim/plugged with post-update hook
- Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
- Plug 'bling/vim-airline'
+Plug 'bling/vim-airline'
  " Add plugins to &runtimepath
- Plug 'kien/ctrlp.vim'
- Plug 'majutsushi/tagbar'
- Plug 'vim-airline/vim-airline-themes'
- call plug#end()
+Plug 'kien/ctrlp.vim'
+Plug 'majutsushi/tagbar'
+Plug 'vim-airline/vim-airline-themes'
+call plug#end()
 
 set tags=./tags;/
 nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
@@ -54,7 +54,7 @@ vnoremap <S-F12>   :TrimSpaces<CR>
 set background=dark
 color molokai
 set cursorline
-hi CursorLine   cterm=NONE ctermbg=darkgrey ctermfg=white
+hi CursorLine   cterm=NONE ctermbg=black ctermfg=white
 set hlsearch
 set backspace=2
 set laststatus=2
@@ -69,6 +69,25 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
+set pastetoggle=<F3>
+
+if !exists('g:airline_symbols')
+      let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
 
 filetype plugin indent on
 " show existing tab with 4 spaces width
@@ -100,5 +119,5 @@ let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 let g:Powerline_symbols = 'fancy'
-let g:airline_powerline_fonts = 1
 let g:airline_theme='powerlineish'
+let g:airline_powerline_fonts = 1

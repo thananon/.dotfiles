@@ -21,5 +21,5 @@ cp .tmux.conf ~/.tmux.conf
 mkdir ~/opt
 cp mybin/* ~/opt/bin 
 
-echo "Done! : Dont forget to run :PluginInstall in vim"
+echo "Done! : Dont forget to run :PlugInstall in vim"
 
