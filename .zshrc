@@ -1,6 +1,6 @@
 # Path to your oh-my-zsh installation.
-export HOME=/home/tpatinya
-export ZSH=/home/tpatinya/.oh-my-zsh
+export HOME=~
+export ZSH=~/.oh-my-zsh
 
 ulimit -c unlimited
 
