@@ -1,4 +1,4 @@
- ~/.vim/autoload/plug.vim --create-dirs \
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
          https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
@@ -21,5 +21,5 @@ cp .tmux.conf ~/.tmux.conf
 mkdir ~/opt
 cp mybin/* ~/opt/bin 
 
-echo "Done! : Dont forget to run :PluginInstall in vim"
+echo "Done! : Dont forget to run :PlugInstall in vim"
 

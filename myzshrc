@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/apatinya/.oh-my-zsh
+  export ZSH=~
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -52,7 +52,7 @@ plugins=(git)
 
 # User configuration
 
-  export PATH="/cm/shared/apps/gcc/4.5.4/bin:/home/apatinya/opt/ompi/bin:/cm/shared/apps/tmux/1.8/bin:/cm/shared/apps/git/2.7.0/bin:/cm/shared/apps/hub/v2.2.2/bin:/cm/shared/apps/go/1.5.2/go/bin:/cm/shared/apps/autotools/ac269-am1133-lt242/bin:/cm/shared/apps/valgrind/3.10.1/bin:/cm/shared/apps/subversion/1.7.9/bin:/cm/shared/apps/hwloc/1.11.2/bin:/cm/shared/apps/slurm/14.03.0/sbin:/cm/shared/apps/slurm/14.03.0/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/sbin:/usr/sbin:/cm/local/apps/environment-modules/3.2.10/bin:/home/apatinya/bin"
+#  export PATH="/cm/shared/apps/gcc/4.5.4/bin:/home/apatinya/opt/ompi/bin:/cm/shared/apps/tmux/1.8/bin:/cm/shared/apps/git/2.7.0/bin:/cm/shared/apps/hub/v2.2.2/bin:/cm/shared/apps/go/1.5.2/go/bin:/cm/shared/apps/autotools/ac269-am1133-lt242/bin:/cm/shared/apps/valgrind/3.10.1/bin:/cm/shared/apps/subversion/1.7.9/bin:/cm/shared/apps/hwloc/1.11.2/bin:/cm/shared/apps/slurm/14.03.0/sbin:/cm/shared/apps/slurm/14.03.0/bin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/sbin:/usr/sbin:/cm/local/apps/environment-modules/3.2.10/bin:/home/apatinya/bin"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 source $ZSH/oh-my-zsh.sh
@@ -67,42 +67,23 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+export TAG_ALIAS_FILE=${HOME}/opt/tagalias
+export TAG_COMMAND=${HOME}/opt/bin/tag_exe
+tag() { $TAG_COMMAND "$@"; source ${TAG_ALIAS_FILE} 2>/dev/null }
 
-export MPI_DIR=${HOME}/opt/mpi
-export PATH=${MPI_DIR}/bin:${PATH}
-export LD_LIBRARY_PATH=${MPI_PATH}/lib:${LD_LIBRARY_PATH}
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export ACK_DIR=${HOME}/.dotfiles/ack-2.14-single-file
-alias ack='perl $ACK_DIR'
-
-SSH_ENV="$HOME/.ssh/environment"
-
-function start_agent {
-    echo "Initialising new SSH agent..."
-    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
-    echo succeeded
-    chmod 600 "${SSH_ENV}"
-		    . "${SSH_ENV}" > /dev/null
-    /usr/bin/ssh-add ~/.ssh/savbu-usnic;
+fd() {
+    local dir 
+    dir=$(find ${1:-.} -path '*/\.*' -prune \
+                        -o -type d -print 2> /dev/null | fzf +m) &&
+    cd "$dir"
 }
-
-
-# Config for savbu
-
-if [ "$HOSTNAME" = savbu-usnic-a ]; then
-
-	# Source SSH settings, if applicable
-	 if [ -f "${SSH_ENV}" ]; then
-	     	. "${SSH_ENV}" > /dev/null
-    	 	ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
-       		 	             start_agent;
-   		 }
- 	else
-   	start_agent;
- 	fi
-
-	# Load modules
-	module load cisco/gnuplot/4.6.4
-	module load slurm
-	module load cisco/gcc/4.5.4
-fi
