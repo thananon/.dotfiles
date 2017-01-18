@@ -1,0 +1,137 @@
+#!/usr/bin/python
+
+import plotly.plotly as py
+import plotly.graph_objs as go
+import plotly.offline as offlineplot
+import sys
+import pandas as pd
+from subprocess import call
+
+i = 0
+xcol = 0
+ycol = 1
+
+data = []
+title = ""
+xlabel = ""
+ylabel = ""
+xtype = ""
+ytype = ""
+tracename = []
+figname = "default"
+cloud = False
+png = False
+
+if len(sys.argv) == 1 :
+    print(""" splot - scatter plot with plotly. It produces HTML version for default output. For additional output please specify.
+            usage :
+                    ./splot <file> [-n tracename] <file> [-n tracename] [options]
+                    -t <title>          : Graph title
+                    -u <a:b>            : Use column a and b as x and y
+                    -xlabel <label>     : Specify xaxis label
+                    -ylabel <label>     : Specify yaxis label
+                    -cloud              : Save figure to plotly cloud
+                    -png                : Save figure to png
+                    -figname <name>     : Name the figure, this will be the output name
+                    -logx,-logy         : Make x/y axis log scale
+            """)
+    exit()
+
+while i < len(sys.argv) :
+
+    arg = sys.argv[i]
+
+    if i == 0:
+        i = i+1
+        continue
+
+    if arg == '-t':
+        title = sys.argv[i+1]
+        i = i+1
+
+    elif arg == '-u':
+        arg = sys.argv[i+1]
+        tmp = arg.split(':')
+        xcol = int(tmp[0])-1
+        ycol = int(tmp[1])-1
+        i = i+1
+
+    elif arg == '-xlabel':
+        xlabel = sys.argv[i+1];
+        i = i+1
+
+    elif arg == '-logx':
+        xtype='log'
+
+    elif arg == '-logy':
+        ytype='log'
+
+    elif arg == '-ylabel':
+        ylabel = sys.argv[i+1];
+        i = i+1
+
+    elif arg == '-figname':
+        figname = sys.argv[i+1]
+        i = i+1
+
+    elif arg == '-cloud':
+        cloud = True
+
+    elif arg == '-png':
+        png = True
+
+    else:
+        f = open(arg, 'r')
+        tmp_data = []
+        for line in f :
+            line = line.strip('\n')
+            numbers = line.split()
+            tmp_data.append(numbers)
+        data.append(tmp_data)
+
+        if sys.argv[i+1] == '-n':
+            tracename.append(sys.argv[i+2])
+            i=i+2
+        else :
+            tracename.append(arg)
+
+
+    i = i+1
+
+plot_data = []
+i=0
+
+for trace in data:
+    x = []
+    y = []
+    for row in trace :
+        x.append(row[xcol])
+        y.append(row[ycol])
+
+    df = pd.DataFrame({'x':x, 'y':y})
+    df.head()
+    plot_line = go.Scatter(x=df['x'],y=df['y'],mode='markers+lines',name=tracename[i])
+    plot_data.append(plot_line)
+    i = i+1
+
+xaxis = dict(
+        type=xtype,
+        title=xlabel
+        )
+
+yaxis = dict(
+        type=ytype,
+        title=ylabel
+        )
+
+layout = go.Layout(title=title,xaxis=xaxis, yaxis=yaxis)
+figure = go.Figure(data=plot_data, layout=layout);
+
+if png :
+    py.image.save_as(figure,filename=figname+".png")
+    call(["open",figname+".png"])
+
+offlineplot.plot(figure,filename = figname)
+
+if cloud :
+    py.plot(figure, filename = figname)
