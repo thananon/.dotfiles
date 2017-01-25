@@ -15,11 +15,12 @@ echo "Copying vimrc"
 cp .vimrc ~/.vimrc
 
 echo "Copying tmuxconf"
-cp .tmux.conf ~/.tmux.conf 
+cp .tmux.conf ~/.tmux.conf
 
+cp ack-2.14-single-file ~/opt/bin
 
 mkdir ~/opt
-cp mybin/* ~/opt/bin 
+cp mybin/* ~/opt/bin
 
 echo "Done! : Dont forget to run :PlugInstall in vim"
 
