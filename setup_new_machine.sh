@@ -17,8 +17,6 @@ cp .vimrc ~/.vimrc
 echo "Copying tmuxconf"
 cp .tmux.conf ~/.tmux.conf
 
-cp ack-2.14-single-file ~/opt/bin
-
 mkdir ~/opt
 cp mybin/* ~/opt/bin
 
