@@ -18,6 +18,7 @@ echo "Copying tmuxconf"
 cp .tmux.conf ~/.tmux.conf
 
 mkdir ~/opt
+mkdir ~/opt/bin
 cp mybin/* ~/opt/bin
 
 echo "Done! : Dont forget to run :PlugInstall in vim"
